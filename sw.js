@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coin-tracker-cache-v2';
+const CACHE_NAME = 'coin-tracker-cache-v3';
 // All the files that make up the "app shell"
 const APP_SHELL_URLS = [
   '/',
@@ -20,8 +20,6 @@ const APP_SHELL_URLS = [
   '/manifest.json',
   '/icon.svg',
   'https://cdn.tailwindcss.com',
-  'https://aistudiocdn.com/react@^19.1.1',
-  'https://aistudiocdn.com/react-dom@^19.1.1/client',
 ];
 
 self.addEventListener('install', event => {
