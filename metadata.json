@@ -1,5 +1,5 @@
 {
-  "name": "Copy of Coin Tracker",
+  "name": "Coin Tracker",
   "description": "A simple application to track a user's 'coin' balance based on a set of study game rules. It includes transaction history, daily tallies, and local data backup/restore functionality.",
   "requestFramePermissions": []
 }
