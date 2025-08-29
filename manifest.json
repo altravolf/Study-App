@@ -1,0 +1,16 @@
+{
+  "short_name": "Coin Tracker",
+  "name": "Coin Tracker",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1a202c",
+  "background_color": "#1a202c",
+  "description": "A simple application to track a user's 'coin' balance based on a set of study game rules."
+}

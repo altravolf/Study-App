@@ -1,9 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { Transaction, AppState, View } from './types';
 import Header from './components/Header';
 import MainScreen from './components/MainScreen';
 import HistoryScreen from './components/HistoryScreen';
+import InstallPWA from './components/InstallPWA';
 
 const App: React.FC = () => {
   const [appState, setAppState] = useLocalStorage<AppState>('coinTrackerData', {
@@ -12,6 +13,18 @@ const App: React.FC = () => {
   });
 
   const [currentView, setCurrentView] = useState<View>('main');
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('SW registered: ', registration);
+        }).catch(registrationError => {
+          console.log('SW registration failed: ', registrationError);
+        });
+      });
+    }
+  }, []);
 
   const addTransaction = useCallback((amount: number, description: string) => {
     if (isNaN(amount) || amount === 0 || !description) return;
@@ -75,6 +88,7 @@ const App: React.FC = () => {
       <footer className="text-center p-4 text-xs text-brand-gray">
         <p>Coin Tracker App</p>
       </footer>
+      <InstallPWA />
     </div>
   );
 };
