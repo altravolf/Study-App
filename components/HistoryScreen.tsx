@@ -1,12 +1,13 @@
-
 import React from 'react';
 import type { Transaction } from '../types';
+import { TrashIcon } from './icons/TrashIcon';
 
 interface HistoryScreenProps {
   history: Transaction[];
+  deleteTransaction: (id: string) => void;
 }
 
-const HistoryScreen: React.FC<HistoryScreenProps> = ({ history }) => {
+const HistoryScreen: React.FC<HistoryScreenProps> = ({ history, deleteTransaction }) => {
   if (history.length === 0) {
     return (
       <div className="text-center py-10">
@@ -37,6 +38,12 @@ const HistoryScreen: React.FC<HistoryScreenProps> = ({ history }) => {
     (a, b) => new Date(b).getTime() - new Date(a).getTime()
   );
 
+  const handleDelete = (tx: Transaction) => {
+    if (window.confirm(`Are you sure you want to delete the transaction "${tx.description}"?`)) {
+        deleteTransaction(tx.id);
+    }
+  }
+
   return (
     <div className="space-y-6">
       {sortedDates.map(date => (
@@ -51,15 +58,24 @@ const HistoryScreen: React.FC<HistoryScreenProps> = ({ history }) => {
           <ul className="space-y-2">
             {groupedTransactions[date].transactions.map(tx => (
               <li key={tx.id} className="flex justify-between items-center bg-brand-dark p-3 rounded-lg">
-                <div>
+                <div className="flex-1 mr-4">
                   <p className="font-medium">{tx.description}</p>
                   <p className="text-xs text-gray-400">
                     {new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
-                <span className={`font-bold text-lg ${tx.amount > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {tx.amount > 0 ? `+${tx.amount}` : tx.amount}
-                </span>
+                <div className="flex items-center gap-4">
+                    <span className={`font-bold text-lg ${tx.amount > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {tx.amount > 0 ? `+${tx.amount}` : tx.amount}
+                    </span>
+                    <button 
+                        onClick={() => handleDelete(tx)}
+                        className="p-1 text-gray-500 hover:text-red-500 transition-colors"
+                        aria-label={`Delete transaction: ${tx.description}`}
+                    >
+                        <TrashIcon className="w-5 h-5" />
+                    </button>
+                </div>
               </li>
             ))}
           </ul>

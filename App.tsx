@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { Transaction, AppState, View } from './types';
@@ -30,6 +29,25 @@ const App: React.FC = () => {
     }));
   }, [setAppState]);
 
+  const deleteTransaction = useCallback((transactionId: string) => {
+    setAppState(prevState => {
+      const txToDelete = prevState.history.find(tx => tx.id === transactionId);
+      if (!txToDelete) {
+        console.warn(`Transaction with id ${transactionId} not found.`);
+        return prevState;
+      }
+
+      const newBalance = prevState.balance - txToDelete.amount;
+      const newHistory = prevState.history.filter(tx => tx.id !== transactionId);
+
+      return {
+        balance: newBalance,
+        history: newHistory,
+      };
+    });
+  }, [setAppState]);
+
+
   const restoreState = (newState: AppState) => {
     // Basic validation
     if (typeof newState.balance === 'number' && Array.isArray(newState.history)) {
@@ -52,7 +70,7 @@ const App: React.FC = () => {
             restoreState={restoreState}
           />
         )}
-        {currentView === 'history' && <HistoryScreen history={appState.history} />}
+        {currentView === 'history' && <HistoryScreen history={appState.history} deleteTransaction={deleteTransaction} />}
       </main>
       <footer className="text-center p-4 text-xs text-brand-gray">
         <p>Coin Tracker App</p>
