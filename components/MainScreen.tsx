@@ -88,16 +88,16 @@ const MainScreen: React.FC<MainScreenProps> = ({ balance, addTransaction, appSta
     { title: "Academic Tasks", actions: [
       { label: "Subject Completed", amount: 2 },
       { label: "Mini Subject Completed", amount: 1 },
-      { label: "30min Revision", amount: 1 },
+      { label: "30Min Revision", amount: 1 },
       { label: "Missed Subject", amount: -1 },
     ]},
     { title: "Daily Habits", actions: [
-      { label: "Coffee before 9am", amount: 4 },
-      { label: "No Phone after 10:30pm", amount: 4 },
+      { label: "Coffee before 9AM", amount: 4 },
+      { label: "No Phone after 10:30PM", amount: 4 },
       { label: "6 Hours Study", amount: 6 },
       { label: "Missed Coffee", amount: -2 },
       { label: "Missed No Phone", amount: -2 },
-      { label: "Missed 6h Study", amount: -3 },
+      { label: "Missed 6Hrs Study", amount: -3 },
     ]},
     { title: "Rewards & Penalties", actions: [
       { label: "Purchase 'Incubate'", amount: -15 },
