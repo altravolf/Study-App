@@ -88,6 +88,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ balance, addTransaction, appSta
     { title: "Academic Tasks", actions: [
       { label: "Subject Completed", amount: 2 },
       { label: "Mini Subject Completed", amount: 1 },
+      { label: "30min Revision", amount: 1 },
       { label: "Missed Subject", amount: -1 },
     ]},
     { title: "Daily Habits", actions: [
