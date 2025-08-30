@@ -1,14 +1,10 @@
-
-import React, { useState, useRef } from 'react';
-import type { AppState } from '../types';
+import React, { useState } from 'react';
 import ActionButton from './ActionButton';
 import { CoinIcon } from './icons/CoinIcon';
 
 interface MainScreenProps {
   balance: number;
   addTransaction: (amount: number, description: string) => void;
-  appState: AppState;
-  restoreState: (newState: AppState) => void;
 }
 
 const NegativeBalanceWarning: React.FC<{ balance: number }> = ({ balance }) => {
@@ -31,10 +27,9 @@ const NegativeBalanceWarning: React.FC<{ balance: number }> = ({ balance }) => {
   );
 };
 
-const MainScreen: React.FC<MainScreenProps> = ({ balance, addTransaction, appState, restoreState }) => {
+const MainScreen: React.FC<MainScreenProps> = ({ balance, addTransaction }) => {
   const [customAmount, setCustomAmount] = useState('');
   const [customDescription, setCustomDescription] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCustomTransaction = () => {
     const amount = parseInt(customAmount, 10);
@@ -47,57 +42,20 @@ const MainScreen: React.FC<MainScreenProps> = ({ balance, addTransaction, appSta
     }
   };
 
-  const handleExport = () => {
-    const dataStr = JSON.stringify(appState, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    const exportFileDefaultName = `coin_tracker_backup_${new Date().toISOString().slice(0,10)}.json`;
-
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-  };
-
-  const handleImportClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const text = e.target?.result;
-          if (typeof text === 'string') {
-            const newState = JSON.parse(text);
-            restoreState(newState);
-          }
-        } catch (error) {
-          console.error("Failed to parse JSON:", error);
-          alert('Error: Could not read or parse the backup file.');
-        }
-      };
-      reader.readAsText(file);
-    }
-    // Reset file input to allow importing the same file again
-    if(event.target) event.target.value = '';
-  };
-  
   const predefinedActions = [
     { title: "Academic Tasks", actions: [
       { label: "Subject Completed", amount: 2 },
       { label: "Mini Subject Completed", amount: 1 },
-      { label: "30Min Revision", amount: 1 },
+      { label: "30min Revision", amount: 1 },
       { label: "Missed Subject", amount: -1 },
     ]},
     { title: "Daily Habits", actions: [
-      { label: "Coffee before 9AM", amount: 4 },
-      { label: "No Phone after 10:30PM", amount: 4 },
+      { label: "Coffee before 9am", amount: 4 },
+      { label: "No Phone after 10:30pm", amount: 4 },
       { label: "6 Hours Study", amount: 6 },
       { label: "Missed Coffee", amount: -2 },
       { label: "Missed No Phone", amount: -2 },
-      { label: "Missed 6Hrs Study", amount: -3 },
+      { label: "Missed 6h Study", amount: -3 },
     ]},
     { title: "Rewards & Penalties", actions: [
       { label: "Purchase 'Incubate'", amount: -15 },
@@ -154,15 +112,6 @@ const MainScreen: React.FC<MainScreenProps> = ({ balance, addTransaction, appSta
           >
             Add
           </button>
-        </div>
-      </div>
-      
-      <div className="bg-brand-light-dark p-4 rounded-xl shadow-lg">
-        <h3 className="text-xl font-semibold mb-3 border-b border-brand-gray pb-2">Data Management</h3>
-        <div className="flex gap-4">
-          <button onClick={handleExport} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors w-full">Export Data</button>
-          <button onClick={handleImportClick} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-colors w-full">Import Data</button>
-          <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".json" />
         </div>
       </div>
     </div>
